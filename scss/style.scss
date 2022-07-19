@@ -1,0 +1,278 @@
+/* colors */
+$mainlight5: #d3f5e4;
+$mainlight4: #a8ebc8;
+$mainlight3: #7ce0ae;
+$mainlight2: #51d695;
+$mainlight1: #24cd7a;
+$maindark1: #2e4150;
+$maindark2: #576774;
+$maindark3: #838d96;
+$maindark4: #abb2b8;
+$maindark5: #d4d9dc;
+
+$accent: $mainlight1;
+$accent-inactive: desaturate($accent, 85%);
+$secondary: $maindark2;
+
+/* tab setting */
+$tab-count: 3;
+$indicator-width: 50px;
+$indicator-height: 4px;
+
+/* breakpoints */
+$breakpoints: (
+  medium: #{$tab-count*250px},
+  small: #{$tab-count*150px}
+);
+
+
+/* selectors relative to radio inputs */
+$label-selector: "~ ul > li";
+$slider-selector: "~ .slider";
+$content-selector: "~ .content > section";
+
+@mixin tabs(
+  $label-selector: $label-selector,
+  $slider-selector: $slider-selector,
+  $content-selector: $content-selector) {
+    
+  @for $i from 1 through $tab-count {
+    &:nth-of-type(#{$i}):checked {
+      #{$label-selector}:nth-child(#{$i}) {
+        @content;
+      }
+
+      #{$slider-selector} {
+        transform: translateX(#{100% * ($i - 1)});
+      }
+
+      #{$content-selector}:nth-child(#{$i}) {
+        display: block;
+      }
+    }
+  }
+}
+html {
+  font-size: 62.5%;
+  font-display: fallback;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: $maindark2;
+}
+  
+.tabs {
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  background: $maindark5;
+  padding: 50px;
+  padding-bottom: 80px;
+  width: 90%;
+  max-width: 102.4rem;
+  min-height: 60vh;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 5px;
+  min-width: #{$tab-count * 60px};
+  input[name="tab-control"] {
+    display: none;
+  }
+  .tab-links li label {
+    font-family: "Montserrat";
+    font-weight: bold;
+    font-size: 18px;
+    color: $accent;
+  }
+  
+  .tab-links {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    
+    li {
+      box-sizing: border-box;
+      flex: 1;
+      width: #{100%/$tab-count};
+      padding: 0 10px;
+      text-align: center;
+      
+      label {
+        transition: all 0.3s ease-in-out;
+        color: $secondary;
+        padding: 5px auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        white-space: nowrap;
+        -webkit-touch-callout: none;
+        user-select: none;
+        
+        br {
+          display: none;
+        }
+        &:hover,
+        &:focus,
+        &:active {
+          outline: 0;
+          color: lighten($secondary, 15%);
+                  }
+      }
+    }
+  }
+  
+  .slider {
+    position: relative;
+    width: #{100%/$tab-count};
+    transition: all 0.33s cubic-bezier(0.38, 0.8, 0.32, 1.07);
+    .indicator {
+      position: relative;
+      width: $indicator-width;
+      max-width: 100%;
+      margin: 0 auto;
+      height: $indicator-height;
+      background: $accent;
+      border-radius: 1px;     
+    }
+  }
+  .content {
+    margin-top: 30px;
+    section {
+      & > * + * {
+        margin: .5rem 0 .5rem;
+      }
+    display: none;
+        animation: {
+        name: content;
+        direction: normal;
+        duration: 0.3s;
+        timing-function: ease-in-out;
+        iteration-count: 1;
+      }
+      h3 {
+        display: none;
+      }
+      h4 {
+        text-align: center;
+        color: $secondary;
+        font-weight: 500;
+        margin: 0;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        margin: 1rem 0;
+    }
+    
+      
+     .terms-section {
+       background-color: rgba(0, 0, 0, 0);
+       ul {
+         margin: 1rem 0 0;
+         list-style: square;
+         li{
+           margin: 0 0 .9rem;
+           font-size: .9rem;
+           color: $secondary;
+         }
+       }
+       .fiscal {
+         margin: 0 0 1rem;
+         & > * + * {
+          margin: .5rem 0 .5rem;
+        }
+      }
+       p,  ul li p{
+        color: $secondary;
+        font-family: sans-serif;
+        font-size: 1.2rem;
+        margin: 1rem 0 0;
+        &::first-letter {
+          margin: .5rem 0 0 2rem;
+        }
+    }
+     }
+     
+    }
+  }
+  
+  
+  
+  
+  input[name="tab-control"] {
+    @include tabs {
+      > label {
+        cursor: default;
+        color: $accent;
+        
+        svg {
+          fill: $accent;
+        }
+        
+        @media (max-width: map-get($breakpoints, small)) {
+          background: rgba(0, 0, 0, 0.08);
+        }
+      }
+    }
+  }
+
+  @keyframes content {
+    from {
+      opacity: 0;
+      transform: translateY(5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+  
+  @media (max-width: map-get($breakpoints, medium)) {
+    ul li label {
+      white-space: initial;
+      
+      br {
+        display: initial;
+      }
+      
+      svg {
+        height: 1.5em;
+      }
+    }
+  }
+  
+  @media (max-width: map-get($breakpoints, small)) {
+    ul li label {
+      padding: 5px;
+      border-radius: 5px;
+      
+      span {
+        display: none;
+      }
+    }
+    
+    .slider {
+      display: none;
+    }
+    
+    .content {
+      margin-top: 20px; 
+      section h2 {
+        display: block;
+      }
+    
+    }
+  }
+}
